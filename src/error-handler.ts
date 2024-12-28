@@ -1,18 +1,20 @@
 import { NextFunction, Request,Response } from "express"
-import { HttpExceptions } from "./exceptions/roots";
+import { ErrorCodes, HttpExceptions } from "./exceptions/roots";
+import { InternalException } from "./exceptions/internal-exception";
 
 
 export const errorHandler = (method: Function) => {
-  return (req:Request,res:Response,next:NextFunction) => {
+  return async (req:Request,res:Response,next:NextFunction) => {
     try {
-        method(req,res,next);
+       await  method(req,res,next);
     } catch (error) {
-        let exceptions: HttpExceptions;
+        let exception: HttpExceptions;
         if(error instanceof HttpExceptions) {
-          exceptions = error
+          exception = error
         }else {
-         
+         exception = new InternalException("something went wrong",error,ErrorCodes.INTERNAL_EXCEPTION)
         }
+        next(exception)
     }
   }
 }
