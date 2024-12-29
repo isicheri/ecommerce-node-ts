@@ -6,3 +6,5 @@ export const CreateProductSchema = z.object({
     price: z.number(),
     tags: z.string().array()
 })
+
+export const UpdateProductSchema = z.object({})
