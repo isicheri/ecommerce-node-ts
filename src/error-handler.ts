@@ -20,6 +20,7 @@ export const errorHandler = (method: Function) => {
             exception = new InternalException("something went wrong",error,ErrorCodes.INTERNAL_EXCEPTION)
           }
         }
+        console.log(exception)
         next(exception)
     }
   }

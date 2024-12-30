@@ -12,6 +12,7 @@ export class HttpExceptions extends Error {
         this.errorCode = errorCode;
         this.statusCode = statusCode;
         this.errors = errors;
+        console.log(errors)
     }
 }
 
@@ -22,5 +23,7 @@ INCORRECT_PASSWORD =10003,
 UNPROCESABLE_ENTITY = 10004,
 INTERNAL_EXCEPTION = 10005,
 NOT_FOUND_EXCEPTION = 10006,
-UNAUTHORIZED_EXCEPTION = 10007
+UNAUTHORIZED_EXCEPTION = 10007,
+ADDRESS_NOT_FOUND = 10008,
+ADDRESS_DOES_NOT_BELONG = 10010
 }
