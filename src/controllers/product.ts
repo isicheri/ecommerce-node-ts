@@ -71,3 +71,22 @@ export const getProductById = async(req:Request,res: Response) => {
         throw new NotFoundException("product not found",ErrorCodes.NOT_FOUND_EXCEPTION)
     }
 }
+
+
+//the fulltext search is not yet fullu functional
+export const searchProduct =async(req:Request,res:Response) => {
+    const products = await prismaClient.product.findMany({
+        where: {
+            name: {
+                contains: req.query.q?.toString()
+            },
+            description: {
+                contains: req.query.q?.toString()
+            },
+            tags: {
+                contains: req.query.q?.toString()
+            }
+        }
+    })
+    res.json(products)
+}

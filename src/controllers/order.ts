@@ -90,11 +90,49 @@ export const getOrderById =async (req:Request,res:Response ) => {
 }
 
 
-export const listAllOrders = (req:IGetUserAuthInfoRequest,res:Response) => {
-     
+export const listAllOrders = async(req:IGetUserAuthInfoRequest,res:Response) => {
+     let whereClause = {}
+     const status = req.query.status;
+     if(status) {
+          whereClause = {
+               status
+          }
+     }
+     const orders = await prismaClient.order.findMany({where: whereClause,skip: +req.params.skip || 0,take: 5})
+     res.json(orders)
 }
 
-export const changeStatus = (req:IGetUserAuthInfoRequest,res:Response) => {}
+export const changeStatus =async(req:IGetUserAuthInfoRequest,res:Response) => {
+     //wrapp in transaction
+     try {
+          const order = await prismaClient.order.update({
+               where: {id: +req.params.id},
+               data: {
+                    status: req.body.status
+               }
+          })
+          await prismaClient.orderEvent.create({
+               data: {
+                    orderId: order.id,
+                    status: req.body.status
+               }
+          })
+          res.json(order)
+     } catch (error) {
+          throw new NotFoundException('Order Not Found',ErrorCodes.NOT_FOUND_EXCEPTION)
+     }
+}
 
 
-export const listUserOrder = (req:IGetUserAuthInfoRequest,res:Response) => {}
+export const listUserOrder = async(req:IGetUserAuthInfoRequest,res:Response) => {
+     let whereClause:any = {
+          userId: +req.params.id,
+          status: req.query.status
+     }
+     const status = whereClause.status;
+     if(status) {
+       whereClause.status = status;
+     }
+     const orders = await prismaClient.order.findMany({where:{ ...whereClause },skip: +req.params.skip || 0,take: 5})
+     res.json(orders)
+}

@@ -12,7 +12,7 @@ export class HttpExceptions extends Error {
         this.errorCode = errorCode;
         this.statusCode = statusCode;
         this.errors = errors;
-        console.log(errors)
+        // console.log(errors)
     }
 }
 

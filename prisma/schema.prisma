@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
@@ -67,6 +68,7 @@ model Product {
   updatedAt DateTime @updatedAt
   cartItems CartItems[]
   order OrderProduct[]
+  @@index([name,description,tags])
   @@map("products")
 }
 

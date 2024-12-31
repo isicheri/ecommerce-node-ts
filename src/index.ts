@@ -26,7 +26,7 @@ export const prismaClient = new PrismaClient({
             },
         }
     }
-})
+}).$extends({result: {user: {fullname: {needs: {name: true},compute: (a) => {return `${a}`}}}}})
 app.use(errorMiddleware)
 app.listen(PORT,() => {
    console.log('server is live')
