@@ -5,10 +5,11 @@ import { addItemToCart, changeQuantity, deleteItemFromCart, getCart } from "../c
 
 
 const cartRouter:Router = Router();
-cartRouter.post('/',[authMiddleware],errorHandler(addItemToCart))
-cartRouter.delete('/:id',[authMiddleware],errorHandler(deleteItemFromCart))
-cartRouter.put("/:id",[authMiddleware],errorHandler(changeQuantity))
-cartRouter.get("/",[authMiddleware],errorHandler(getCart))
+cartRouter.use(authMiddleware)
+cartRouter.post('/',errorHandler(addItemToCart))
+cartRouter.delete('/:id',errorHandler(deleteItemFromCart))
+cartRouter.put("/:id",errorHandler(changeQuantity))
+cartRouter.get("/",errorHandler(getCart))
 
 
 export default cartRouter

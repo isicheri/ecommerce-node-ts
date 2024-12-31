@@ -80,3 +80,30 @@ export const updateUser = async(req:IGetUserAuthInfoRequest,res: Response) => {
     })
     res.json(updatedUser)
 }
+
+
+export const changeUserRole =async (req:Request,res:Response) => {
+    //add Validation
+   try {
+    const user = await prismaClient.user.update({where: {id: +req.params.id},data: {role: req.body.role}})
+   } catch (error) {
+    throw new NotFoundException("User not Found.",ErrorCodes.USER_NOT_FOUND)
+   }
+}
+
+export const listUsers = async(req:IGetUserAuthInfoRequest, res: Response) => {
+    const user = await prismaClient.user.findMany({
+        skip: +req.query.skip! || 0,
+        take: 5
+    })
+    res.json(user)
+}
+
+export const getUserById =async (req:IGetUserAuthInfoRequest, res: Response) => {
+    try {
+        const user = await prismaClient.user.findFirstOrThrow({where:{id: +req.params.id},include: {cartItems: true,addresses: true}})
+        res.json(user)
+    } catch (error) {
+        throw new NotFoundException("User not Found.",ErrorCodes.USER_NOT_FOUND)
+    }
+}

@@ -9,7 +9,7 @@ import { BadRequestException } from "../exceptions/bad-request";
 
 
 export const addItemToCart = async (req:IGetUserAuthInfoRequest,res:Response,next:NextFunction) => {
-    // check for the existenc of product in users cart
+    // check for the existence of particular  product in users cart
     const validatedData = AddToCartSchema.parse(req.body)
     let product: Product;
     let user: User;
@@ -18,6 +18,12 @@ export const addItemToCart = async (req:IGetUserAuthInfoRequest,res:Response,nex
             id: req.user?.id
         },include: {cartItems: true}
     })
+
+    // const exist = await prismaClient.cartItems.findFirstOrThrow({where: {productId: validatedData.productId}})
+    // if(exist) {
+    //     return res.json({message: "product is already in your cart"})
+    // }
+    
         try {
             product = await prismaClient.product.findFirstOrThrow({
                 where: {
